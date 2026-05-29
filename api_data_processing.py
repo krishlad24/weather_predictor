@@ -8,6 +8,11 @@ from sqlalchemy import create_engine
 
 api_key = os.environ.get("WEATHER_API")
 raw_password = os.environ.get("SUPABASE_PASS")
+
+if not raw_password or not api_key:
+    print("Error: Missing required environment variables.")
+    sys.exit(1)
+
 safe_password = urllib.parse.quote(raw_password)
 
 DATABASE_URL = f"postgresql://postgres.fnlpabicinbydknyprez:{safe_password}@aws-1-ap-southeast-2.pooler.supabase.com:5432/postgres"
