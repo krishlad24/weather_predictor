@@ -1,0 +1,28 @@
+name: Daily Weather Ingestion
+
+on: 
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repository code
+        uses: actions/checkout@v3
+
+      - name: setup python environment
+        uses: actions/setup-python@v4
+        with:
+          python-python: '3.10'
+          
+      - name: Install dependencies
+        run: |
+          pip install pandas requests sqlalchemy psycopg2-binary supabase
+
+      - name: Execute Ingestion Script
+        env:
+          SUPABASE_PASSWORD: ${{ secrets.SUPABASE_PASS }}
+          OPENWEATHER_API_KEY: ${{ secrets.WEATHER_API }}
+        run: python ingest.py
